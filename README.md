@@ -6,7 +6,7 @@ Some comment might be lost while translating, you can read them from the origin 
 
 Include this library in your project by doing:
 
-`composer require aaa913121/permutations`
+`composer require nolin/permutations:dev-master`
 
 And use it in your code like this:
 
