@@ -1,10 +1,12 @@
 {
     "name": "nolin/permutations",
+    "description": "Generate permutations and combinations.",
     "autoload": {
         "psr-4": {
             "Nolin\\Permutations\\": "src/"
         }
     },
+    "license": "MIT",
     "authors": [
         {
             "name": "Nolin",
