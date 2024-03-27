@@ -1,0 +1,22 @@
+{
+    "name": "nolin/permutations",
+    "autoload": {
+        "psr-4": {
+            "Nolin\\Permutations\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nolin",
+            "email": "aaa913121@gmail.com"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.34"
+    }
+}
