@@ -11,7 +11,7 @@ class Combinations implements Iterator, Countable
 {
     private array $values;
     private int $type;
-    private Permutations $permutations;
+    private Iterator $permutations;
     private int $currentIndex;
 
     public function __construct($values, $lowerIndex, Type $type = Type::WITHOUT_REPETITION)
@@ -41,7 +41,7 @@ class Combinations implements Iterator, Countable
             $map = array_merge(array_fill(0, count($values) - 1, true), array_fill(0, $lowerIndex, false));
         }
 
-        $this->permutations = new Permutations($map);
+        $this->permutations = (new Permutations($map))->getIterator();
         $this->rewind();
     }
 
@@ -64,6 +64,7 @@ class Combinations implements Iterator, Countable
     #[ReturnTypeWillChange] public function current()
     {
         $currentPermutation = $this->permutations->current();
+
         return $this->computeCurrent($currentPermutation);
     }
 
