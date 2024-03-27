@@ -14,6 +14,8 @@ And use it in your code like this:
 // Create the object
 $permutations = new \Nolin\Permutations\Permutations([1,2,3,4,5]);
 
-foreach ($permutations as $permutation) {// do something}
+foreach ($permutations as $permutation) {
+  // do something
+}
 
 ```
