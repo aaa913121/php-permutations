@@ -5,7 +5,6 @@ namespace Nolin\Permutations;
 use Countable;
 use Iterator;
 use ReturnTypeWillChange;
-use RuntimeException;
 
 
 /**
@@ -15,10 +14,10 @@ class Permutations implements Iterator, Countable
 {
     private array $values;
     private array $lexicographicOrders;
-    private int $position;
     private int $count;
     private int $type;
-    private array $originValues;
+    private int $currentIndex;
+    private array $originalValues;
 
     /**
      * Create a permutation set from the provided list of values.
@@ -31,13 +30,17 @@ class Permutations implements Iterator, Countable
     public function __construct(array $values, Type $type = Type::WITHOUT_REPETITION)
     {
         $this->values = $values;
-        $this->originValues = $values;
         $this->type = $type->value;
+        $this->currentIndex = 0;
+        $this->originalValues = $values;
         $this->init();
     }
 
     private function init(): void
     {
+        $this->values = $this->originalValues;
+        $this->currentIndex = 0;
+
         $this->lexicographicOrders = range(0, count($this->values) - 1);
 
         if ($this->type === Type::WITHOUT_REPETITION->value) {
@@ -58,7 +61,6 @@ class Permutations implements Iterator, Countable
         }
 
         $this->count = $this->getCount();
-        $this->rewind();
     }
 
     /**
@@ -105,7 +107,7 @@ class Permutations implements Iterator, Countable
 
     #[ReturnTypeWillChange] public function rewind(): void
     {
-        $this->position = Position::BEFORE_FIRST->value;
+        $this->init();
     }
 
     /**
@@ -120,49 +122,28 @@ class Permutations implements Iterator, Countable
 
     #[ReturnTypeWillChange] public function current(): array
     {
-        // 如果是before first，就跳過
-        if ($this->position === Position::BEFORE_FIRST->value) {
-            $this->next();
-        }
-
         return $this->values;
     }
 
     #[ReturnTypeWillChange] public function key(): int
     {
-        return $this->position;
+        return $this->currentIndex;
     }
 
     #[ReturnTypeWillChange] public function next(): void
     {
-        switch ($this->position) {
-            case Position::BEFORE_FIRST->value:
-                $this->values = $this->originValues;
-                $this->position = Position::IN_SET->value;
-                break;
-            case Position::IN_SET->value:
-                if (count($this->values) < 2) {
-                    $this->position = Position::AFTER_LAST->value;
-                } elseif (!$this->nextPermutation()) {
-                    $this->position = Position::AFTER_LAST->value;
-                }
-                break;
-            case Position::AFTER_LAST->value:
-                break;
-            default:
-                throw new RuntimeException('Invalid position.');
-        }
-
+        $this->currentIndex++;
+        $this->nextPermutation();
     }
 
-    private function nextPermutation(): bool
+    private function nextPermutation(): void
     {
         $i = count($this->lexicographicOrders) - 1;
 
         while ($this->lexicographicOrders[$i - 1] >= $this->lexicographicOrders[$i]) {
             --$i;
             if ($i === 0) {
-                return false;
+                return;
             }
         }
 
@@ -183,7 +164,6 @@ class Permutations implements Iterator, Countable
             ++$i;
             --$j;
         }
-        return true;
     }
 
     private function swap(int $i, int $j): void
@@ -198,7 +178,7 @@ class Permutations implements Iterator, Countable
 
     #[ReturnTypeWillChange] public function valid(): bool
     {
-        return $this->position !== Position::AFTER_LAST->value;
+        return $this->currentIndex >= 0 && $this->currentIndex <= $this->count -1;
     }
 
     public function count(): int

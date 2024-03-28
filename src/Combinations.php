@@ -27,33 +27,27 @@ class Combinations implements Iterator, Countable
         $this->type = $type->value;
         $this->currentIndex = 0;
 
-        $map = [];
+        $valueCount = count($values);
         if ($this->type == Type::WITHOUT_REPETITION->value) {
-            $valueCount = count($values);
-            $map = array_fill(0, $valueCount, false);
-
-            for ($i = 0; $i < $valueCount; $i++) {
-                if ($i < $valueCount - $lowerIndex) {
-                    $map[$i] = true;
-                }
-            }
+            $map = array_merge(
+                array_fill(0, $lowerIndex, false),
+                array_fill(0, $valueCount - $lowerIndex, true)
+            );
         } else {
-            $map = array_merge(array_fill(0, count($values) - 1, true), array_fill(0, $lowerIndex, false));
+            $map = array_merge(
+                array_fill(0, $lowerIndex, false),
+                array_fill(0, $valueCount - 1, true)
+            );
         }
 
         $this->permutations = (new Permutations($map))->getIterator();
-        $this->rewind();
     }
 
     #[ReturnTypeWillChange] public function rewind(): void
     {
         $this->permutations->rewind();
+        $this->permutations = $this->permutations->getIterator();
         $this->currentIndex = 0;
-    }
-
-    #[ReturnTypeWillChange] public function valid(): bool
-    {
-        return $this->permutations->valid();
     }
 
     #[ReturnTypeWillChange] public function key(): int
@@ -64,24 +58,7 @@ class Combinations implements Iterator, Countable
     #[ReturnTypeWillChange] public function current()
     {
         $currentPermutation = $this->permutations->current();
-
         return $this->computeCurrent($currentPermutation);
-    }
-
-    #[ReturnTypeWillChange] public function next(): void
-    {
-        $this->permutations->next();
-        $this->currentIndex++;
-    }
-
-    #[ReturnTypeWillChange] public function count(): int
-    {
-        return count($this->permutations);
-    }
-
-    public function getType(): int
-    {
-        return $this->type;
     }
 
     private function computeCurrent($permutation): array
@@ -99,6 +76,29 @@ class Combinations implements Iterator, Countable
             }
         }
         return $currentList;
+    }
+
+    #[ReturnTypeWillChange] public function next(): void
+    {
+        if ($this->valid()) {
+            $this->permutations->next();
+            $this->currentIndex++;
+        }
+    }
+
+    #[ReturnTypeWillChange] public function valid(): bool
+    {
+        return $this->permutations->valid();
+    }
+
+    #[ReturnTypeWillChange] public function count(): int
+    {
+        return $this->permutations->count();
+    }
+
+    public function getType(): int
+    {
+        return $this->type;
     }
 }
 
