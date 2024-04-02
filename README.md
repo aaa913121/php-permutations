@@ -1,24 +1,31 @@
-This is a service that can do combinations and permutations with PHP.
-The origin idea is from [eoincampbell/combinatorics](https://github.com/eoincampbell/combinatorics), while I want to try it in PHP environment, so I translate it with chatGPT.
-Some comment might be lost while translating, you can read them from the origin files.
+# PHP Permutations
+This PHP package provides functionalities for generating combinations and permutations. Initially inspired by [eoincampbell/combinatorics](https://github.com/eoincampbell/combinatorics), this package is an adaptation for PHP environments. While translating, some comments may have been lost; however, you can refer to the original files for those details.
 
-## How to use
+## Installation
 
-Include this library in your project by doing:
+Install this package via Composer:
 
 `composer require nolin/permutations:dev-master`
 
-And use it in your code like this:
+## Usage
+Once installed, you can use it in your PHP code as follows:
 
 ```php
-// Create the object
-$permutations = new \Nolin\Permutations\Permutations([1,2,3,4,5]);
+// Include the library
+use Nolin\Permutations\Permutations;
 
+// Create a permutations object with an array of elements
+$permutations = new Permutations([1, 2, 3, 4, 5]);
+
+// Iterate through the permutations
 foreach ($permutations as $permutation) {
-  // do something
+    // Perform desired actions with each permutation
+    // e.g., echo/print, store in an array, etc.
 }
 
 ```
+## Variations Feature
+Variations have been transformed into VariationsWithRepetition and VariationsWithoutRepetition. The C# VariationsWithoutRepetition feature, originally from the source material, was not quite fitting the intended result. As a result, an upgrade has been made to the current() method.
 
-The variations feature was transformed into `VariationsWithRepetition` and `VariationsWithoutRepetition` separately.
-The origin C# `VariationsWithoutRepetition` feature wasn't quire fit the result in the [origin article](https://www.codeproject.com/Articles/26050/Permutations-Combinations-and-Variations-using-C-G), so I upgrade the `current()` part.
+## Package Repository
+Feel free to explore the codebase, report issues, or submit pull requests. Your contributions are welcomed and appreciated.
