@@ -1,27 +1,7 @@
 <?php
 
-test('can make combinations without repetition', function () {
-    $combinations = new \Nolin\Permutations\Combinations([1, 2, 3, 4, 5, 6], 3);
-
-    $this->assertEquals(20, count($combinations));
-});
-
-test('no duplicate combinations without repetition', function () {
-    $combinations = new \Nolin\Permutations\Combinations([1, 2, 3], 2);
-    $expectCombinations = [
-        [1, 2],
-        [1, 3],
-        [2, 3],
-    ];
-
-    foreach ($combinations as $combination) {
-        $this->assertContains($combination, $expectCombinations);
-    }
-
-    $this->assertEquals(3, count($combinations));
-});
-
 test('can make combinations with correct order without repetition', function () {
+    $combinations = new \Nolin\Permutations\Combinations([1, 2, 3, 4, 5, 6], 3);
     $expectCombinations = [
         [1, 2, 3],
         [1, 2, 4],
@@ -45,37 +25,17 @@ test('can make combinations with correct order without repetition', function () 
         [4, 5, 6],
     ];
 
-    $combinations = new \Nolin\Permutations\Combinations([1, 2, 3, 4, 5, 6], 3);
+    foreach ($expectCombinations as $expectVariation) {
+        $this->assertContains($expectVariation, iterator_to_array($combinations));
+    }
 
     $this->assertEquals($expectCombinations, iterator_to_array($combinations));
     $this->assertEquals(20, count($combinations));
-});
-
-test('can make combinations with repetition', function () {
-    $combinations = new \Nolin\Permutations\Combinations([1, 2, 3, 4, 5, 6], 2, \Nolin\Permutations\Type::WITH_REPETITION);
-
-    $this->assertEquals(21, count($combinations));
-});
-
-test('no duplicate combinations with repetition', function () {
-    $combinations = new \Nolin\Permutations\Combinations([1, 2, 3], 2, \Nolin\Permutations\Type::WITH_REPETITION);
-    $expectCombinations = [
-        [1, 1],
-        [1, 2],
-        [1, 3],
-        [2, 2],
-        [2, 3],
-        [3, 3],
-    ];
-
-    foreach ($combinations as $combination) {
-        $this->assertContains($combination, $expectCombinations);
-    }
-
-    $this->assertEquals(6, count($combinations));
+    $this->assertEquals(20, count(iterator_to_array($combinations)));
 });
 
 test('can make combinations with correct order with repetition', function () {
+    $combinations = new \Nolin\Permutations\Combinations([1, 2, 3, 4, 5, 6], 2, \Nolin\Permutations\Type::WITH_REPETITION);
     $expectCombinations = [
         [1, 1],
         [1, 2],
@@ -100,8 +60,11 @@ test('can make combinations with correct order with repetition', function () {
         [6, 6],
     ];
 
-    $combinations = new \Nolin\Permutations\Combinations([1, 2, 3, 4, 5, 6], 2, \Nolin\Permutations\Type::WITH_REPETITION);
+    foreach ($expectCombinations as $expectVariation) {
+        $this->assertContains($expectVariation, iterator_to_array($combinations));
+    }
 
     $this->assertEquals($expectCombinations, iterator_to_array($combinations));
     $this->assertEquals(21, count($combinations));
+    $this->assertEquals(21, count(iterator_to_array($combinations)));
 });
