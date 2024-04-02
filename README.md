@@ -19,3 +19,6 @@ foreach ($permutations as $permutation) {
 }
 
 ```
+
+The variations feature was transformed into `VariationsWithRepetition` and `VariationsWithoutRepetition` separately.
+The origin C# `VariationsWithoutRepetition` feature wasn't quire fit the result in the [origin article](https://www.codeproject.com/Articles/26050/Permutations-Combinations-and-Variations-using-C-G), so I upgrade the `current()` part.
